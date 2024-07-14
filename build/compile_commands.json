@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/kuraxii/desktop/repo/OnlineConference-server/build/test",
+  "command": "/usr/bin/g++  -I/home/kuraxii/desktop/repo/OnlineConference-server/test/./protobufTest -g -std=gnu++17 -o CMakeFiles/test.dir/test.cpp.o -c /home/kuraxii/desktop/repo/OnlineConference-server/test/test.cpp",
+  "file": "/home/kuraxii/desktop/repo/OnlineConference-server/test/test.cpp"
+},
+{
+  "directory": "/home/kuraxii/desktop/repo/OnlineConference-server/build/test",
+  "command": "/usr/bin/g++  -I/home/kuraxii/desktop/repo/OnlineConference-server/test/./protobufTest -g -std=gnu++17 -o CMakeFiles/test.dir/protobufTest/test.pb.cc.o -c /home/kuraxii/desktop/repo/OnlineConference-server/test/protobufTest/test.pb.cc",
+  "file": "/home/kuraxii/desktop/repo/OnlineConference-server/test/protobufTest/test.pb.cc"
+},
+{
+  "directory": "/home/kuraxii/desktop/repo/OnlineConference-server/build/src",
+  "command": "/usr/bin/g++  -I/home/kuraxii/desktop/repo/OnlineConference-server/src/./test -I/home/kuraxii/desktop/repo/OnlineConference-server/src/./thrid_party/include -g -std=gnu++17 -o CMakeFiles/conference.dir/buffer.cpp.o -c /home/kuraxii/desktop/repo/OnlineConference-server/src/buffer.cpp",
+  "file": "/home/kuraxii/desktop/repo/OnlineConference-server/src/buffer.cpp"
+},
+{
+  "directory": "/home/kuraxii/desktop/repo/OnlineConference-server/build/src",
+  "command": "/usr/bin/g++  -I/home/kuraxii/desktop/repo/OnlineConference-server/src/./test -I/home/kuraxii/desktop/repo/OnlineConference-server/src/./thrid_party/include -g -std=gnu++17 -o CMakeFiles/conference.dir/http.cpp.o -c /home/kuraxii/desktop/repo/OnlineConference-server/src/http.cpp",
+  "file": "/home/kuraxii/desktop/repo/OnlineConference-server/src/http.cpp"
+},
+{
+  "directory": "/home/kuraxii/desktop/repo/OnlineConference-server/build/src",
+  "command": "/usr/bin/g++  -I/home/kuraxii/desktop/repo/OnlineConference-server/src/./test -I/home/kuraxii/desktop/repo/OnlineConference-server/src/./thrid_party/include -g -std=gnu++17 -o CMakeFiles/conference.dir/net.cpp.o -c /home/kuraxii/desktop/repo/OnlineConference-server/src/net.cpp",
+  "file": "/home/kuraxii/desktop/repo/OnlineConference-server/src/net.cpp"
+},
+{
+  "directory": "/home/kuraxii/desktop/repo/OnlineConference-server/build/src",
+  "command": "/usr/bin/g++  -I/home/kuraxii/desktop/repo/OnlineConference-server/src/./test -I/home/kuraxii/desktop/repo/OnlineConference-server/src/./thrid_party/include -g -std=gnu++17 -o CMakeFiles/conference.dir/rtp.cpp.o -c /home/kuraxii/desktop/repo/OnlineConference-server/src/rtp.cpp",
+  "file": "/home/kuraxii/desktop/repo/OnlineConference-server/src/rtp.cpp"
+}
+]

@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/kuraxii/desktop/repo/OnlineConference-server/src/net.cpp
+net.h
+/home/kuraxii/desktop/repo/OnlineConference-server/src/net.h
+iostream
+-
+sys/socket.h
+-
+arpa/inet.h
+-
+unistd.h
+-
+
+/home/kuraxii/desktop/repo/OnlineConference-server/src/net.h
+unordered_map
+-
+string
+-
+vector
+-
+mutex
+-
+netinet/in.h
+-
+

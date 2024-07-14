@@ -1,0 +1,2 @@
+/usr/bin/ar qc libconference.a CMakeFiles/conference.dir/buffer.cpp.o CMakeFiles/conference.dir/http.cpp.o CMakeFiles/conference.dir/net.cpp.o CMakeFiles/conference.dir/rtp.cpp.o
+/usr/bin/ranlib libconference.a
