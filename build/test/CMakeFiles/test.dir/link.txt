@@ -1,1 +1,0 @@
-/usr/bin/g++ -g CMakeFiles/test.dir/test.cpp.o CMakeFiles/test.dir/protobufTest/test.pb.cc.o -o test  -lprotobuf ../src/libconference.a 
