@@ -2,5 +2,5 @@ include_directories(./test/ ./thrid_party/include/ )
 link_directories(./thrid_party/lib/)
 
 
-file(GLOB_RECURSE SOURCES "*.cpp")
+file(GLOB_RECURSE SOURCES "*.cpp" "http/*.cpp")
 add_library(conference ${SOURCES})

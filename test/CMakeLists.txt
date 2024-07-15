@@ -4,4 +4,4 @@ project(Test)
 include_directories(./protobufTest)
 
 add_executable(test test.cpp protobufTest/test.pb.cc)
-target_link_libraries(test protobuf conference)
+target_link_libraries(test protobuf conference curl)
