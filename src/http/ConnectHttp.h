@@ -6,7 +6,11 @@
  * @Descript:
  */
 
-/* 设计思路  不支持长连接，只保存 ip port用于提供连接索引 */
+/* 设计思路  不支持长连接，只保存 ip port用于提供连接索引 
+    数据报头
+    
+    body 采用protobuf解析
+*/
 #pragma once
 
 #include <map>
