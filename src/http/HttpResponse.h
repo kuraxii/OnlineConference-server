@@ -5,22 +5,37 @@
  * @CreatedTime: 周一 7月 15 22:32:54 2024
  * @Descript:
  */
+
+#pragma once
 #include <map>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
+enum class HttpResponseHeaderContentType {
+    MESSAGE = 0,
+    IMAGE,
+    CONTROL
+};
 
 // 构造响应
 class HttpResponse {
 public:
-    HttpResponse(int statusCode, const std::map<std::string, std::string>& headers, const std::vector<char>& body);
-
+    HttpResponse();
     int getStatusCode() const;
-    const std::map<std::string, std::string>& getHeaders() const;
-    const std::vector<char>& getBody() const;
+    HttpResponse &setStatusCode(int code);
+    HttpResponse &setContentType(HttpResponseHeaderContentType contentType);
+    HttpResponse &setContentLength(int len);
+    HttpResponse &setBody(const char *, size_t len);
+    std::string &toResponse();
 
 private:
-    int statusCode;
-    std::map<std::string, std::string> headers;
-    std::vector<char> body;
+    int statuscode_;
+    std::map<std::string, std::string> headers_;
+    std::vector<char> body_;
+    std::string response;
+    static const std::vector<const char *> CONTENTTYPE;
+    static const std::vector<const char *> KEY;
+    static const std::vector<const char *> HTTPRESPONSEHEADER;
+    static const std::unordered_map<int, std::string> CODE_STATUS;
 };

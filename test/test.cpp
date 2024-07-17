@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 #include "../src/net.h"
-#include "../src/http/ConnectHttp.h"
+#include "../src/http/HttpConn.h"
 int main()
 {
 
@@ -19,14 +19,10 @@ int main()
     // std::cout << str << std::endl;
     // UDPManager::getInstance();
 
-    ConnectHttp client;
+    HttpConn client;
 
     // Perform a GET request
-    HttpRequest getRequest("http://www.example.com");
-    HttpResponse getResponse = client.get(getRequest);
-    std::cout << "GET Response Status: " << getResponse.getStatusCode() << std::endl;
-    std::cout << "GET Response Body: " << std::string(getResponse.getBody().begin(), getResponse.getBody().end())
-              << std::endl;
+
 
     // // Perform a POST request with binary data
     // std::vector<char> postData = {0x48, 0x65, 0x6C, 0x6C, 0x6F}; // "Hello" in binary

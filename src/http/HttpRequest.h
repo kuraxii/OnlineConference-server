@@ -10,19 +10,17 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <unordered_map>
 
 // 解析请求
 class HttpRequest {
 public:
-    HttpRequest(const std::string &url, const std::map<std::string, std::string> &headers = {},
-                const std::vector<char> &body = {});
-
-    const std::string &getUrl() const;
-    const std::map<std::string, std::string> &getHeaders() const;
-    const std::vector<char> &getBody() const;
+    void parse(std::string str);
+    const std::string &get_url() const;
+    const std::map<std::string, std::string> &get_headers() const;
+    const std::vector<char> &get_Body() const;
 
 private:
-    std::string url;
-    std::map<std::string, std::string> headers;
-    std::vector<char> body;
+    std::unordered_map<std::string, std::string> header_;
+    std::unordered_map<std::string, std::string> post_;
 };
