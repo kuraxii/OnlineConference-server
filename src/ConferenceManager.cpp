@@ -8,14 +8,12 @@
 
 #include "ConferenceManager.h"
 
-void ConferenceManager::addMember(HttpConn &member)
-{
+void ConferenceManager::addMember(HttpConn &member) {
 
     httpConns_.push_back(std::move(member));
 }
 
-void ConferenceManager::delMember(Address addr)
-{
+void ConferenceManager::delMember(Address addr) {
     std::lock_guard<std::mutex> lock(mutex);
 
     auto it = httpConns_.begin();
@@ -27,8 +25,7 @@ void ConferenceManager::delMember(Address addr)
     }
 }
 
-void ConferenceManager::removeAll()
-{
+void ConferenceManager::removeAll() {
     std::lock_guard<std::mutex> lock(mutex);
 
     auto it = httpConns_.begin();

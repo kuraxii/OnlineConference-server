@@ -25,9 +25,12 @@
 #include "../buffer/buffer.h"
 class HttpConn {
 public:
-    HttpConn() = default;
-
+    HttpConn();
+    HttpConn(int fd, const Address &addr);
     ~HttpConn();
+
+    HttpConn(HttpConn &&other) noexcept = default;
+    HttpConn &operator=(HttpConn &&other) noexcept;
 
     void init(int sockFd, const Address &addr);
     void read();

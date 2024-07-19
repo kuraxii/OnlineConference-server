@@ -15,31 +15,26 @@ const std::unordered_map<int, std::string> HttpResponse::CODE_STATUS = {
 };
 const std::vector<const char *> HttpResponse::CONTENTTYPE = {"txt", "image/jpeg", "contorl"};
 const std::vector<const char *> HttpResponse::KEY = {"Content-Length", "Content-Type", "Authorization"};
-HttpResponse &HttpResponse::setStatusCode(int code)
-{
+HttpResponse &HttpResponse::setStatusCode(int code) {
     statuscode_ = code;
     return *this;
 }
 
-HttpResponse &HttpResponse::setContentType(HttpResponseHeaderContentType contentType)
-{
+HttpResponse &HttpResponse::setContentType(HttpResponseHeaderContentType contentType) {
     headers_["Content-Type"] = std::string(CONTENTTYPE.at(static_cast<int>(contentType)));
     return *this;
 }
-HttpResponse &HttpResponse::setContentLength(int len)
-{
+HttpResponse &HttpResponse::setContentLength(int len) {
     headers_["Content-Length"] = std::to_string(len);
     return *this;
 }
 
-HttpResponse &HttpResponse::setBody(const char *data, size_t len)
-{
+HttpResponse &HttpResponse::setBody(const char *data, size_t len) {
     body_.insert(body_.begin(), data, data + len);
     return *this;
 }
 
-std::string &HttpResponse::toResponse()
-{
+std::string &HttpResponse::toResponse() {
     response = "HTTP/1.1 " + std::to_string(statuscode_) + CODE_STATUS.find(statuscode_)->second + "\r\n";
     for (const auto &it : headers_) {
         response += it.first + ':' + it.second + "\r\n";

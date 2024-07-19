@@ -15,45 +15,41 @@
 
 std::atomic<int> HttpConn::userCount = 0;
 
-HttpConn::~HttpConn()
-{
+HttpConn::HttpConn() : fd_(-1), address_({"0.0.0.0", 0}), buffer_(std::make_unique<Buffer>()) {
+}
+HttpConn::HttpConn(int fd, const Address &addr) : fd_(-1), address_(addr), buffer_(std::make_unique<Buffer>()) {
+}
+HttpConn::~HttpConn() {
     close();
-};
+}
 
-void HttpConn::init(int fd, const Address &addr)
-{
+void HttpConn::init(int fd, const Address &addr) {
     assert(fd > 0);
     userCount++;
     address_ = std::move(addr);
 }
 
-void HttpConn::close()
-{
+void HttpConn::close() {
     ::close(fd_);
 }
 
-int HttpConn::getFd() const
-{
+int HttpConn::getFd() const {
     return fd_;
-};
+}
 
-const Address &HttpConn::getAddr() const
-{
+const Address &HttpConn::getAddr() const {
     return address_;
 }
 
-const char *HttpConn::getIp() const
-{
+const char *HttpConn::getIp() const {
     return address_.ip.c_str();
 }
 
-short HttpConn::getPort() const
-{
+short HttpConn::getPort() const {
     return address_.port;
 }
 
-void HttpConn::read()
-{
+void HttpConn::read() {
     ssize_t ret = -1;
     do {
         ret = buffer_->readByFd(fd_);

@@ -12,20 +12,17 @@
 #include <unistd.h>
 #include <cstring>
 
-UDPManager &UDPManager::getInstance(int max_udp_index)
-{
+UDPManager &UDPManager::getInstance(int max_udp_index) {
     static UDPManager instance(max_udp_index);
     return instance;
 }
 
-UDPManager::UDPManager(int max_udp_index) : max_udp_index(max_udp_index)
-{
+UDPManager::UDPManager(int max_udp_index) : max_udp_index(max_udp_index) {
     sockets.resize(max_udp_index, -1);
     createSocket();
 }
 
-UDPManager::~UDPManager()
-{
+UDPManager::~UDPManager() {
     for (int sockfd : sockets) {
         if (sockfd != -1) {
             close(sockfd);
@@ -33,8 +30,7 @@ UDPManager::~UDPManager()
     }
 }
 
-bool UDPManager::createSocket()
-{
+bool UDPManager::createSocket() {
     std::lock_guard<std::mutex> lock(mtx);
     for (int i = 0; i < max_udp_index; ++i) {
         int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -65,8 +61,7 @@ bool UDPManager::createSocket()
     return true;
 }
 
-int UDPManager::getSocketFd(int index) const
-{
+int UDPManager::getSocketFd(int index) const {
     std::lock_guard<std::mutex> lock(mtx);
     if (index < 0 || index >= max_udp_index) {
         return -1;
@@ -75,8 +70,7 @@ int UDPManager::getSocketFd(int index) const
 }
 
 // 获取ip与端口号
-Address UDPManager::getIpPort(int index) const
-{
+Address UDPManager::getIpPort(int index) const {
     std::lock_guard<std::mutex> lock(mtx);
     auto it = index_to_ipport.find(index);
     if (it != index_to_ipport.end()) {
