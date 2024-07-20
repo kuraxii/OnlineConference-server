@@ -5,7 +5,7 @@
  * @CreatedTime: 周三 7月 17 15:25:39 2024
  * @Descript:
  */
-
+#pragma once
 #include <vector>
 
 class Buffer {

@@ -7,9 +7,9 @@
  */
 
 #pragma once
-#include "http/HttpConn.h"
-#include "udp/udp.h"
-#include "ConferenceManager.h"
+#include "../http/HttpConn.h"
+#include "udp.h"
+#include "../ConferenceManager/ConferenceManager.h"
 #include <list>
 #include "kuraxii_utils/utils/threadpool/ThreadPool.h"
 #include <mutex>

@@ -15,12 +15,36 @@
 // 解析请求
 class HttpRequest {
 public:
-    void parse(std::string str);
-    const std::string &get_url() const;
-    const std::map<std::string, std::string> &get_headers() const;
-    const std::vector<char> &get_Body() const;
+    HttpRequest();
+    ~HttpRequest() = default;
+    void parse(const std::string &data);
+    std::string getPath() const;
+    std::string getMethod() const;
+    std::string getVersion() const;
+    std::string getHeader(std::string key) const;
+    std::vector<char> getBody() const;
+
+    bool isParse();
+
+    void print();
 
 private:
-    std::unordered_map<std::string, std::string> header_;
-    std::unordered_map<std::string, std::string> post_;
+    void parseRequestLine(const std::string &line);
+    void parseHeader(const std::string &line);
+    void parseBody(const std::string &line);
+    enum class State {
+        START,
+        HEADERS,
+        BODY,
+        END
+    };
+    State state;         // 解析状态
+    std::string method;  // 请求方法
+    std::string url;     // 请求路径
+    std::string version; // http版本
+    std::unordered_map<std::string, std::string> posts;
+    std::vector<char> body;
+    int contentLength;
+    int bodyLength;
+    bool parsed;
 };
