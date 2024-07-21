@@ -8,9 +8,9 @@
 
 #include "ConferenceManager.h"
 
-void ConferenceManager::addMember(HttpConn &member) {
+void ConferenceManager::addMember(std::shared_ptr<HttpConn> &member) {
 
-    httpConns_.push_back(std::move(member));
+    httpConns_.push_back(member);
 }
 
 void ConferenceManager::delMember(Address addr) {
@@ -18,10 +18,11 @@ void ConferenceManager::delMember(Address addr) {
 
     auto it = httpConns_.begin();
     while (it != httpConns_.end()) {
-        if (it->getAddr() == addr) {
+        if ((*it)->getAddr() == addr) {
             httpConns_.erase(it);
             break;
         }
+        it++;
     }
 }
 
@@ -30,6 +31,6 @@ void ConferenceManager::removeAll() {
 
     auto it = httpConns_.begin();
     while (it != httpConns_.end()) {
-        httpConns_.erase(it);
+        it = httpConns_.erase(it);
     }
 }

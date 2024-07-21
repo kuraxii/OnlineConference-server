@@ -14,12 +14,11 @@
 #include "kuraxii_utils/utils/task/task.h"
 class ConferenceManager {
 public:
-    explicit ConferenceManager(int nudp = 3)
-    {
+    explicit ConferenceManager(int nudp = 3) {
     }
 
     void run();
-    void addMember(HttpConn&);
+    void addMember(std::shared_ptr<HttpConn> &);
     void addTask();
     void delMember(Address);
     void removeAll();
@@ -27,7 +26,7 @@ public:
 private:
     std::atomic<int> next_udp_index_; // 下一个udp描述符的索引 按会议为一组分配端口实现负载均衡
     int max_udp_index_;               // 最大udp号
-    std::list<HttpConn> httpConns_;  // 当前会议所有的文件描述符
+    std::list<std::shared_ptr<HttpConn>> httpConns_; // 当前会议所有的http
     KURAXII::AtomicQueue<KURAXII::Task> task;
     std::mutex mutex;
 };

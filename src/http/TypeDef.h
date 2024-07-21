@@ -10,11 +10,12 @@
 #include "string"
 
 struct Address {
+    int fd;
     std::string ip;
     u_int16_t port;
+    std::string pass = "";
 
-    bool operator==(const Address &other) const
-    {
+    bool operator==(const Address &other) const {
         return (ip == other.ip) && (port == other.port);
     }
 };

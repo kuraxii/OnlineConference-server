@@ -29,9 +29,6 @@ public:
     HttpConn(int fd, const Address &addr);
     ~HttpConn();
 
-    HttpConn(HttpConn &&other) noexcept = default;
-    HttpConn &operator=(HttpConn &&other) noexcept;
-
     void init(int sockFd, const Address &addr);
     void read();
     void write();
@@ -44,10 +41,10 @@ public:
 
 private:
     int fd_;
-    Address address_;
+    Address address_;  // 认证信息
 
     std::unique_ptr<Buffer> buffer_;
 
-    // HttpRequest request;
-    // HttpResponse response;
+    HttpRequest request;
+    HttpResponse response;
 };

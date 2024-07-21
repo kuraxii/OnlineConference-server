@@ -15,13 +15,12 @@
 
 class UDPManager {
 public:
-    static UDPManager &getInstance(int max_udp_index = 10);
+    UDPManager(int max_udp_index = 10);
+    ~UDPManager();
     Address getIpPort(int index) const;
     int getSocketFd(int index) const;
 
 private:
-    UDPManager(int max_udp_index);
-    ~UDPManager();
     bool createSocket();
     UDPManager(const UDPManager &) = delete;
     UDPManager &operator=(const UDPManager &) = delete;

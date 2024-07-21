@@ -12,11 +12,6 @@
 #include <unistd.h>
 #include <cstring>
 
-UDPManager &UDPManager::getInstance(int max_udp_index) {
-    static UDPManager instance(max_udp_index);
-    return instance;
-}
-
 UDPManager::UDPManager(int max_udp_index) : max_udp_index(max_udp_index) {
     sockets.resize(max_udp_index, -1);
     createSocket();
@@ -76,5 +71,5 @@ Address UDPManager::getIpPort(int index) const {
     if (it != index_to_ipport.end()) {
         return it->second;
     }
-    return {"", 0};
+    return {-1, "", 0};
 }

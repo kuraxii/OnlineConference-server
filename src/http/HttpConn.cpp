@@ -15,7 +15,7 @@
 
 std::atomic<int> HttpConn::userCount = 0;
 
-HttpConn::HttpConn() : fd_(-1), address_({"0.0.0.0", 0}), buffer_(std::make_unique<Buffer>()) {
+HttpConn::HttpConn() : fd_(-1), address_({-1, "0.0.0.0", 0}), buffer_(std::make_unique<Buffer>()) {
 }
 HttpConn::HttpConn(int fd, const Address &addr) : fd_(-1), address_(addr), buffer_(std::make_unique<Buffer>()) {
 }

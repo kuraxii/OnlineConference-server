@@ -1,11 +1,8 @@
 #include <sstream>
 #include <iostream>
-
+#include "src/server/server.h"
 int main() {
-    std::string str{"123456\r\n123\n"};
-    std::istringstream stream{str};
-    std::string line;
-    while (std::getline(stream, line)) {
-        // std::cout << line << "\n";
-    }
+    server ser;
+    ser.init();
+    return ser.run();
 }

@@ -13,14 +13,18 @@
 #include <list>
 #include "kuraxii_utils/utils/threadpool/ThreadPool.h"
 #include <mutex>
+#include <memory>
 class GlobalResourceManager {
-
 public:
+    GlobalResourceManager();
+    void addHttpConn(std::shared_ptr<HttpConn>);
+    void addTask(KURAXII::Task &&task);
+
 private:
-    std::list<HttpConn> httpConns;
+    std::list<std::shared_ptr<HttpConn>> allHttpConn; // 保存所有的http连接
+    std::list<std::shared_ptr<ConferenceManager>> allConferenceManager;
     UDPManager udpUDPManager;
     KURAXII::ThreadPool threadPool;
-    std::list<ConferenceManager> ConferenceManager;
 
     std::mutex mutex;
 };
