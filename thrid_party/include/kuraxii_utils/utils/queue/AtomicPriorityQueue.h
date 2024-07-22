@@ -61,7 +61,6 @@ public:
         }
         _priority_queue.emplace(std::forward<U>(value));
         _cv.notify_one();
-        
     }
 
     bool empty()

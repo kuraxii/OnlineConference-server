@@ -4,6 +4,7 @@
 #include <atomic>
 #include <thread>
 #include "../../basic/BasicInclude.h"
+
 KURAXII_NAMESPACE_BEGIN
 
 class SpinLock : public Object {

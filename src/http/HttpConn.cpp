@@ -58,3 +58,10 @@ void HttpConn::read() {
         }
     } while (1);
 }
+
+void HttpConn::parse() {
+    // request.parse()
+}
+
+void HttpConn::setrResponse() {
+}

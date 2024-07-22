@@ -12,10 +12,10 @@ GlobalResourceManager::GlobalResourceManager() {
     threadPool.init();
 }
 
-void GlobalResourceManager::addHttpConn(std::shared_ptr<HttpConn> conn) {
-    allHttpConn.push_back(conn);
+void GlobalResourceManager::addHttpConn(int fd, std::shared_ptr<HttpConn> conn) {
+    allHttpConn.emplace(fd, conn);
 }
 
-void GlobalResourceManager::addTask(KURAXII::Task &&task) {
-    threadPool.addTask(std::move(task));
+void GlobalResourceManager::addTask(KURAXII::Task &task) {
+    threadPool.addTask(task);
 }

@@ -22,9 +22,9 @@ public:
     void closeConn(int fd);
     void dealRead(int fd);
     void dealWrite(int fd);
+
 private:
     int lfd;
     EPOLL epoll;
-    std::list<std::shared_ptr<HttpConn>> httpClinets;
+    std::unordered_map<int, std::shared_ptr<HttpConn>> unassignedHttpConnections;
 };
-

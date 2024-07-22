@@ -35,7 +35,7 @@ void server::init(int ip, unsigned short port) {
         exit(-1);
     }
 
-    epoll.addFd(lfd, EPOLLIN);
+    epoll.addFd(lfd, EPOLLIN | EPOLLET);
 }
 
 int server::run() {
@@ -55,11 +55,9 @@ int server::run() {
                 closeConn(fd);
             } else if (events & EPOLLIN) {
 
-                std::function<void()> func = std::bind(&server::dealRead, this, fd);
-                KURAXII::Task task{std::move(func)};
-                Singleton<GlobalResourceManager>::getInstance().addTask(std::move(task));
-            } else if (events & EPOLLOUT) {
-                dealWrite(fd);
+                KURAXII::Task task{std::bind(&server::dealRead, this, fd)};
+
+                Singleton<GlobalResourceManager>::getInstance().addTask(task);
             }
         }
     }
@@ -71,9 +69,19 @@ void server::dealListen() {
     int fd = accept(lfd, (struct sockaddr *)&addr, &len);
     Address address{fd, inet_ntoa(addr.sin_addr), ntohs(addr.sin_port)};
     std::shared_ptr<HttpConn> conn = std::make_shared<HttpConn>(fd, address);
-    httpClinets.push_back(conn);
-    Singleton<GlobalResourceManager>::getInstance();
+
+    unassignedHttpConnections.emplace(fd, conn);
+    Singleton<GlobalResourceManager>::getInstance().addHttpConn(fd, conn);
 }
 
 void server::dealRead(int fd) {
+    auto it = unassignedHttpConnections.find(fd);
+    assert(it != unassignedHttpConnections.end());
+    auto& conn = it->second;
+    conn->read();
+    
+
+}
+
+void server::closeConn(int fd) {
 }

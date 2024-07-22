@@ -17,11 +17,11 @@
 class GlobalResourceManager {
 public:
     GlobalResourceManager();
-    void addHttpConn(std::shared_ptr<HttpConn>);
-    void addTask(KURAXII::Task &&task);
+    void addHttpConn(int fd, std::shared_ptr<HttpConn>);
+    void addTask(KURAXII::Task &task);
 
 private:
-    std::list<std::shared_ptr<HttpConn>> allHttpConn; // 保存所有的http连接
+    std::unordered_map<int, std::shared_ptr<HttpConn>> allHttpConn; // 保存所有的http连接
     std::list<std::shared_ptr<ConferenceManager>> allConferenceManager;
     UDPManager udpUDPManager;
     KURAXII::ThreadPool threadPool;

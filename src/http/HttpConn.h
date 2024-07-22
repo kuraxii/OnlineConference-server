@@ -37,6 +37,13 @@ public:
     short getPort() const;
     const char *getIp() const;
     const Address &getAddr() const;
+
+    void parse();
+
+    void setrResponse();
+    
+
+
     static std::atomic<int> userCount;
 
 private:

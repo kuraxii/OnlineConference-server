@@ -18,6 +18,10 @@ public:
     void append(std::vector<char>);
     void clear();
 
+
+
+    void getReadBuff();
+    void getWriteBuff();
 private:
     std::vector<char> readBuff;
     std::vector<char> writeBuff;
