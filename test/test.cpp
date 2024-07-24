@@ -95,7 +95,7 @@ void httpTest() {
                                "\r\n"
                                "Hello, World!";
     HttpRequest parser;
-    parser.parse(request_data);
+    parser.parse(std::vector<char>{request_data.begin(), request_data.end()});
     parser.print();
 }
 
@@ -132,7 +132,7 @@ TEST(HttpTest, HttpRequestParsing) {
                                "\r\n"
                                "Hello, World!";
     HttpRequest parser;
-    parser.parse(request_data);
+    parser.parse(std::vector<char>{request_data.begin(), request_data.end()});
 
     EXPECT_EQ(parser.getMethod(), "POST");
     EXPECT_EQ(parser.getPath(), "/submit");

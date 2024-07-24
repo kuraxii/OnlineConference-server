@@ -10,17 +10,18 @@
 #include <sstream>
 #include <regex>
 #include <iostream>
-HttpRequest::HttpRequest() : state(State::START), contentLength(0), bodyLength(0), parsed(false) {
+HttpRequest::HttpRequest()
+    : requestState(State::START), requestContentLength_(0), requestBodyLength_(0), requestParsed_(false) {
 }
 
-void HttpRequest::parse(const std::string &data) {
-    std::istringstream stream(data);
+void HttpRequest::parse(const std::vector<char> &data) {
+    std::istringstream stream(data.data());
     std::string line;
     while (std::getline(stream, line)) {
         if (!line.empty() && line.back() == '\r') {
             line.pop_back();
         }
-        switch (state) {
+        switch (requestState) {
         case State::START:
             parseRequestLine(line);
             break;
@@ -34,6 +35,7 @@ void HttpRequest::parse(const std::string &data) {
             break;
 
         case State::END:
+            requestParsed_ = true;
         default:
             return;
         }
@@ -44,18 +46,19 @@ void HttpRequest::parseRequestLine(const std::string &line) {
     static const std::regex requestLineRegex(R"((\w+)\s+(\S+)\s+(HTTP/\d+\.\d+))");
     std::smatch match;
     if (std::regex_match(line, match, requestLineRegex)) {
-        method = match[1];
-        url = match[2];
-        version = match[3];
-        state = State::HEADERS;
+        requestMethod_ = match[1];
+        requestUrl_ = match[2];
+        requestVersion_ = match[3];
+        requestState = State::HEADERS;
     }
 }
 void HttpRequest::parseHeader(const std::string &line) {
     if (line.empty()) {
-        if (method == "POST" && contentLength > 0) {
-            state = State::BODY;
+        if (requestMethod_ == "POST" && requestContentLength_ > 0) {
+
+            requestState = State::BODY;
         } else {
-            state = State::END;
+            requestState = State::END;
         }
         return;
     }
@@ -64,59 +67,59 @@ void HttpRequest::parseHeader(const std::string &line) {
     if (pos != std::string::npos) {
         std::string key = line.substr(0, pos);
         std::string value = line.substr(pos + 2);
-        posts[key] = value;
+        requestHeaders_[key] = value;
 
         if (key == "Content-Length") {
-            contentLength = std::stoi(value);
+            requestContentLength_ = std::stoi(value);
         }
     }
 }
 void HttpRequest::parseBody(const std::string &line) {
     thread_local size_t len = 0;
 
-    body.insert(body.end(), line.begin(), line.end());
-    body.push_back('\n');
-    bodyLength += line.length() + 1; // Include '\n' in length
+    requestPost_.insert(requestPost_.end(), line.begin(), line.end());
+    requestPost_.push_back('\n');
+    requestBodyLength_ += line.length() + 1; // Include '\n' in length
 
-    if (bodyLength >= contentLength) {
-        state = State::END;
-        parsed = true;
+    if (requestBodyLength_ >= requestContentLength_) {
+        requestState = State::END;
+        requestParsed_ = true;
     }
 }
 
 std::string HttpRequest::getPath() const {
-    return url;
+    return requestUrl_;
 }
 
 std::string HttpRequest::getHeader(std::string key) const {
-    if (posts.find(key) != posts.end()) {
-        return posts.find(key)->second;
+    if (requestHeaders_.find(key) != requestHeaders_.end()) {
+        return requestHeaders_.find(key)->second;
     }
     return {""};
 }
-std::vector<char> HttpRequest::getBody() const {
-    return body;
+std::vector<char> HttpRequest::getPost() const {
+    return requestPost_;
 }
 
 std::string HttpRequest::getMethod() const {
-    return method;
+    return requestMethod_;
 }
 std::string HttpRequest::getVersion() const {
-    return version;
+    return requestVersion_;
 }
 
-bool HttpRequest::isParse() {
-    return parsed;
+bool HttpRequest::isParsed() {
+    return requestParsed_;
 }
 
 void HttpRequest::print() {
 
-    std::cout << "Method: " << method << std::endl;
-    std::cout << "URI: " << url << std::endl;
-    std::cout << "Version: " << version << std::endl;
+    std::cout << "Method: " << requestMethod_ << std::endl;
+    std::cout << "URI: " << requestUrl_ << std::endl;
+    std::cout << "Version: " << requestVersion_ << std::endl;
     std::cout << "Headers:" << std::endl;
-    for (const auto &header : posts) {
+    for (const auto &header : requestHeaders_) {
         std::cout << "  " << header.first << ": " << header.second << std::endl;
     }
-    std::cout << "Body: " << body.data() << std::endl;
+    std::cout << "Body: " << requestPost_.data() << std::endl;
 }

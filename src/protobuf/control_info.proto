@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package control_info;
+
+message ControlInfo {
+    string ip = 1;
+    uint32 port = 2;
+    int32 controlType = 3;
+}

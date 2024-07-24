@@ -12,6 +12,7 @@
 #include "server.h"
 #include "../http/TypeDef.h"
 #include "../GlobalResourceManager/GlobalResourceManager.h"
+#include "../protobuf/message_info.pb.h"
 
 server::server() {
 }
@@ -74,11 +75,29 @@ void server::dealListen() {
 }
 
 void server::dealRead(int fd) {
-    auto it = unassignedHttpConnections.get(fd);
-    assert(it == std::nullopt);
 
-    (*it)->read();
+    auto conn = unassignedHttpConnections.get(fd);
+    assert(conn != std::nullopt);
+    (*conn)->read();
+    (*conn)->parse();
+    if (!(*conn)->isParsed()) {
+        // debug
+        return;
+    }
+    if ((*conn)->getMethod() != "POST") {
+        // debug
+        return;
+    } else {
+    }
+    message_info::MessageInfo msg;
+    msg.ParseFromArray((*conn)->getPost().data(), (*conn)->getPost().size());
+    // if()
+    // {
+
+    // }
 }
 
 void server::closeConn(int fd) {
+    unassignedHttpConnections.remove(fd);
+    GlobalResourceManager::getInstance().removeHttpConn(fd);
 }

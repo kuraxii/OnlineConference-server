@@ -23,13 +23,12 @@
 #include "TypeDef.h"
 #include <memory>
 #include "../buffer/buffer.h"
-class HttpConn {
+class HttpConn : public HttpRequest, public HttpResponse {
 public:
     HttpConn();
     HttpConn(int fd, const Address &addr);
     ~HttpConn();
 
-    void init(int sockFd, const Address &addr);
     void read();
     void write();
     void close();
@@ -39,19 +38,12 @@ public:
     const Address &getAddr() const;
 
     void parse();
-
-    void setrResponse();
-    
-
+    void toResponse() ;
 
     static std::atomic<int> userCount;
 
 private:
     int fd_;
-    Address address_;  // 认证信息
-
+    Address address_; // 认证信息
     std::unique_ptr<Buffer> buffer_;
-
-    HttpRequest request;
-    HttpResponse response;
 };

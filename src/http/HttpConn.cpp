@@ -23,12 +23,6 @@ HttpConn::~HttpConn() {
     close();
 }
 
-void HttpConn::init(int fd, const Address &addr) {
-    assert(fd > 0);
-    userCount++;
-    address_ = std::move(addr);
-}
-
 void HttpConn::close() {
     ::close(fd_);
 }
@@ -59,9 +53,10 @@ void HttpConn::read() {
     } while (1);
 }
 
-void HttpConn::parse() {
-    // request.parse()
+void HttpConn::toResponse() {
+    HttpResponse::toResponse(buffer_->getWriteBuff());
 }
 
-void HttpConn::setrResponse() {
+void HttpConn::parse() {
+    HttpRequest::parse(buffer_->getReadBuff());
 }

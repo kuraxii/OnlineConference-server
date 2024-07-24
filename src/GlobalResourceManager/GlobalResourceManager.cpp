@@ -19,3 +19,7 @@ void GlobalResourceManager::addHttpConn(int fd, std::shared_ptr<HttpConn> conn) 
 void GlobalResourceManager::addTask(KURAXII::Task &task) {
     threadPool.addTask(task);
 }
+
+void GlobalResourceManager::removeHttpConn(int fd) {
+    allHttpConn.remove(fd);
+}

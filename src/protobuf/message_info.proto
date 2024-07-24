@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package message_info;
+
+message MessageInfo {
+    string ip = 1;
+    uint32 port = 2;
+    int32 messageType = 3;
+    string messageContent = 4;
+}
+
+/*
+帮我写一份protobuf配置
+每一份都一定有
+string ip = 1;
+uint32 port = 2;
+两个字段
+
+1.(消息信息):
+消息类型(int8)
+消息内容
+
+2.(控制信息):
+控制类型
+
+3.(返回信息):
+房间号（有多个房间号码）
+房间成员(可以有多个成员)
+
+
+4.(返回信息):
+房间号（有1个房间号码）
+房间成员(可以有多个成员)
+
+
+
+
+
+*/

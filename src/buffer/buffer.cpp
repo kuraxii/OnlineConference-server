@@ -48,3 +48,10 @@ void Buffer::clear() {
     readBuff.clear();
     writeBuff.clear();
 }
+
+const std::vector<char> &Buffer::getReadBuff() const {
+    return readBuff;
+}
+ std::vector<char> &Buffer::getWriteBuff()  {
+    return writeBuff;
+}

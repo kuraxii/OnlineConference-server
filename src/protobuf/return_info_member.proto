@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package return_info;
+
+message RoomMember {
+    string name = 1;
+    int32 id = 2;
+}
+
+message ReturnInfoSingleRoom {
+    string ip = 1;
+    uint32 port = 2;
+    string roomNumber = 3;
+    repeated RoomMember members = 4;
+}

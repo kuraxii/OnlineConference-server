@@ -21,21 +21,21 @@ enum class HttpResponseHeaderContentType {
 // 构造响应
 class HttpResponse {
 public:
-    HttpResponse();
+    HttpResponse() = default;
+    virtual ~HttpResponse();
     int getStatusCode() const;
     HttpResponse &setStatusCode(int code);
     HttpResponse &setContentType(HttpResponseHeaderContentType contentType);
     HttpResponse &setContentLength(int len);
     HttpResponse &setBody(const char *, size_t len);
-    std::string &toResponse();
+    std::vector<char> &toResponse(std::vector<char> &data);
 
-private:
-    int statuscode_;
-    std::map<std::string, std::string> headers_;
-    std::vector<char> body_;
-    std::string response;
+protected:
     static const std::vector<const char *> CONTENTTYPE;
     static const std::vector<const char *> KEY;
     static const std::vector<const char *> HTTPRESPONSEHEADER;
     static const std::unordered_map<int, std::string> CODE_STATUS;
+    int responseStatusCode_;
+    std::map<std::string, std::string> responseHeaders_;
+    std::vector<char> responseBody_;
 };

@@ -16,17 +16,17 @@
 class HttpRequest {
 public:
     HttpRequest();
-    ~HttpRequest() = default;
-    void parse(const std::string &data);
+    virtual ~HttpRequest() = default;
+
     std::string getPath() const;
     std::string getMethod() const;
     std::string getVersion() const;
     std::string getHeader(std::string key) const;
-    std::vector<char> getBody() const;
-
-    bool isParse();
-
+    std::vector<char> getPost() const;
+    bool isParsed();
+    bool isPost();
     void print();
+    void parse(const std::vector<char> &data);
 
 private:
     void parseRequestLine(const std::string &line);
@@ -38,13 +38,13 @@ private:
         BODY,
         END
     };
-    State state;         // 解析状态
-    std::string method;  // 请求方法
-    std::string url;     // 请求路径
-    std::string version; // http版本
-    std::unordered_map<std::string, std::string> posts;
-    std::vector<char> body;
-    int contentLength;
-    int bodyLength;
-    bool parsed;
+    State requestState;          // 解析状态
+    std::string requestMethod_;  // 请求方法
+    std::string requestUrl_;     // 请求路径
+    std::string requestVersion_; // http版本
+    std::unordered_map<std::string, std::string> requestHeaders_;
+    std::vector<char> requestPost_;
+    int requestContentLength_;
+    int requestBodyLength_;
+    bool requestParsed_;
 };

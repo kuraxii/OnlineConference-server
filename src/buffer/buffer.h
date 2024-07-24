@@ -18,10 +18,9 @@ public:
     void append(std::vector<char>);
     void clear();
 
+    const std::vector<char> &getReadBuff() const;
+    std::vector<char> &getWriteBuff();
 
-
-    void getReadBuff();
-    void getWriteBuff();
 private:
     std::vector<char> readBuff;
     std::vector<char> writeBuff;

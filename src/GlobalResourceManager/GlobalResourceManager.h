@@ -22,6 +22,7 @@ class GlobalResourceManager : public Singleton<GlobalResourceManager> {
 
 public:
     void addHttpConn(int fd, std::shared_ptr<HttpConn>);
+    void removeHttpConn(int fd);
     void addTask(KURAXII::Task &task);
 
 private:

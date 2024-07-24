@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package return_info;
+
+message ReturnInfoMultipleRooms {
+    string ip = 1;
+    uint32 port = 2;
+    repeated string roomNumbers = 3;
+}

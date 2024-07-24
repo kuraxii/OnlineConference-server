@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package packet;
-
-message Message {
-    string ip = 1;
-    uint32 port = 2;
-    bytes body = 3;
-}
