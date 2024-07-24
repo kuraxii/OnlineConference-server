@@ -12,17 +12,23 @@
 #include "../ConferenceManager/ConferenceManager.h"
 #include <list>
 #include "kuraxii_utils/utils/threadpool/ThreadPool.h"
+#include "../template/template.hpp"
 #include <mutex>
 #include <memory>
-class GlobalResourceManager {
+#include "kuraxii_utils/utils/list/atomic_list.h"
+#include "kuraxii_utils/utils/map/AtomicUnorderedMap.h"
+class GlobalResourceManager : public Singleton<GlobalResourceManager> {
+    friend class Singleton<GlobalResourceManager>;
+
 public:
-    GlobalResourceManager();
     void addHttpConn(int fd, std::shared_ptr<HttpConn>);
     void addTask(KURAXII::Task &task);
 
 private:
-    std::unordered_map<int, std::shared_ptr<HttpConn>> allHttpConn; // 保存所有的http连接
-    std::list<std::shared_ptr<ConferenceManager>> allConferenceManager;
+    GlobalResourceManager();
+    ~GlobalResourceManager() = default;
+    KURAXII::AtomicUnorderedMap<int, std::shared_ptr<HttpConn>> allHttpConn; // 保存所有的http连接
+    KURAXII::AtomicList<std::shared_ptr<ConferenceManager>> allConferenceManager;
     UDPManager udpUDPManager;
     KURAXII::ThreadPool threadPool;
 

@@ -30,15 +30,18 @@ constexpr UINT POOL_TASK_STRATEGY = -2; // 固定用pool中的队列的调度策
 constexpr UINT LONG_TIME_TASK = -101;   // 长时间任务调度策略
 
 struct ThreadPoolConfig {
-    UINT getDefaultThreadSize() const {
+    UINT getDefaultThreadSize() const
+    {
         return default_thread_size_;
     }
 
-    UINT getSecondaryThreadSize() const {
+    UINT getSecondaryThreadSize() const
+    {
         return secondary_thread_size_;
     }
 
-    UINT getMaxThreadSize() const {
+    UINT getMaxThreadSize() const
+    {
         return max_thread_size_;
     }
     UINT default_thread_size_ = DEFAULT_THREAD_SIZE;

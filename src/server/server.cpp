@@ -56,8 +56,7 @@ int server::run() {
             } else if (events & EPOLLIN) {
 
                 KURAXII::Task task{std::bind(&server::dealRead, this, fd)};
-
-                Singleton<GlobalResourceManager>::getInstance().addTask(task);
+                GlobalResourceManager::getInstance().addTask(task);
             }
         }
     }
@@ -70,17 +69,15 @@ void server::dealListen() {
     Address address{fd, inet_ntoa(addr.sin_addr), ntohs(addr.sin_port)};
     std::shared_ptr<HttpConn> conn = std::make_shared<HttpConn>(fd, address);
 
-    unassignedHttpConnections.emplace(fd, conn);
-    Singleton<GlobalResourceManager>::getInstance().addHttpConn(fd, conn);
+    unassignedHttpConnections.insert(fd, conn);
+    GlobalResourceManager::getInstance().addHttpConn(fd, conn);
 }
 
 void server::dealRead(int fd) {
-    auto it = unassignedHttpConnections.find(fd);
-    assert(it != unassignedHttpConnections.end());
-    auto& conn = it->second;
-    conn->read();
-    
+    auto it = unassignedHttpConnections.get(fd);
+    assert(it == std::nullopt);
 
+    (*it)->read();
 }
 
 void server::closeConn(int fd) {

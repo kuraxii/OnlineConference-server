@@ -13,7 +13,7 @@ GlobalResourceManager::GlobalResourceManager() {
 }
 
 void GlobalResourceManager::addHttpConn(int fd, std::shared_ptr<HttpConn> conn) {
-    allHttpConn.emplace(fd, conn);
+    allHttpConn.insert(fd, conn);
 }
 
 void GlobalResourceManager::addTask(KURAXII::Task &task) {

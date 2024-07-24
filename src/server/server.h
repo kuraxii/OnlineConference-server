@@ -13,6 +13,7 @@
 #include "../epoll/epoll.h"
 #include "../http/HttpConn.h"
 #include "../template/template.hpp"
+#include "kuraxii_utils/utils/map/AtomicUnorderedMap.h"
 class server {
 public:
     server();
@@ -26,5 +27,5 @@ public:
 private:
     int lfd;
     EPOLL epoll;
-    std::unordered_map<int, std::shared_ptr<HttpConn>> unassignedHttpConnections;
+    KURAXII::AtomicUnorderedMap<int, std::shared_ptr<HttpConn>> unassignedHttpConnections;
 };
