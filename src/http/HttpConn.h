@@ -18,7 +18,7 @@
 #include <vector>
 #include <curl/curl.h>
 #include <atomic>
-#include "HttpRequest.h"
+#include "HttpRequest.hpp"
 #include "HttpResponse.h"
 #include "TypeDef.h"
 #include <memory>
@@ -38,7 +38,7 @@ public:
     const Address &getAddr() const;
 
     void parse();
-    void toResponse() ;
+    void toResponse();
 
     static std::atomic<int> userCount;
 

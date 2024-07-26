@@ -8,6 +8,31 @@
 
 #pragma once
 #include "string"
+#include <unistd.h>
+struct file_descriptor {
+    int m_fd = -1;
+
+    file_descriptor() = default;
+
+    explicit file_descriptor(int fd) : m_fd(fd) {
+    }
+
+    file_descriptor(file_descriptor &&that) noexcept : m_fd(that.m_fd) {
+        that.m_fd = -1;
+    }
+
+    file_descriptor &operator=(file_descriptor &&that) noexcept {
+        std::swap(m_fd, that.m_fd);
+        return *this;
+    }
+
+    ~file_descriptor() {
+        if (m_fd == -1) {
+            return;
+        }
+        close(m_fd);
+    }
+};
 
 struct Address {
     int fd;

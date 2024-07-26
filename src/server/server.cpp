@@ -80,17 +80,17 @@ void server::dealRead(int fd) {
     assert(conn != std::nullopt);
     (*conn)->read();
     (*conn)->parse();
-    if (!(*conn)->isParsed()) {
+    if (!((*conn)->method() == "post")) {
         // debug
         return;
     }
-    if ((*conn)->getMethod() != "POST") {
+    if ((*conn)->method() != "POST") {
         // debug
         return;
     } else {
     }
     message_info::MessageInfo msg;
-    msg.ParseFromArray((*conn)->getPost().data(), (*conn)->getPost().size());
+    msg.ParseFromArray((*conn)->body().data(), (*conn)->body().size());
     // if()
     // {
 

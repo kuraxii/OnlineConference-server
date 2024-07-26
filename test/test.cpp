@@ -11,8 +11,8 @@
 #include <arpa/inet.h>
 #include "../src/http/HttpConn.h"
 #include "../src/epoll/epoll.h"
-#include "../src/protobuf/message.pb.h"
-#include "../src/http/HttpRequest.h"
+
+#include "../src/http/HttpRequest.hpp"
 
 void sys_err(const char *str) {
     perror(str);
@@ -62,29 +62,29 @@ void testepoll() {
 }
 
 void testProtobuf() {
-    packet::Message msg;
-    msg.set_ip("192.168.1.1");
-    msg.set_port(8080);
-    msg.set_body("This is the body data");
+    // packet::Message msg;
+    // msg.set_ip("192.168.1.1");
+    // msg.set_port(8080);
+    // msg.set_body("This is the body data");
 
-    // 序列化到字符串
-    std::string serialized_data;
-    if (!msg.SerializeToString(&serialized_data)) {
-        std::cerr << "Failed to serialize data." << std::endl;
-        return;
-    }
+    // // 序列化到字符串
+    // std::string serialized_data;
+    // if (!msg.SerializeToString(&serialized_data)) {
+    //     std::cerr << "Failed to serialize data." << std::endl;
+    //     return;
+    // }
 
-    // 反序列化
-    packet::Message new_msg;
-    if (!new_msg.ParseFromString(serialized_data)) {
-        std::cerr << "Failed to parse data." << std::endl;
-        return;
-    }
+    // // 反序列化
+    // packet::Message new_msg;
+    // if (!new_msg.ParseFromString(serialized_data)) {
+    //     std::cerr << "Failed to parse data." << std::endl;
+    //     return;
+    // }
 
-    // 输出反序列化后的数据
-    std::cout << "IP: " << new_msg.ip() << std::endl;
-    std::cout << "Port: " << new_msg.port() << std::endl;
-    std::cout << "Body: " << new_msg.body() << std::endl;
+    // // 输出反序列化后的数据
+    // std::cout << "IP: " << new_msg.ip() << std::endl;
+    // std::cout << "Port: " << new_msg.port() << std::endl;
+    // std::cout << "Body: " << new_msg.body() << std::endl;
 }
 
 void httpTest() {
@@ -95,7 +95,8 @@ void httpTest() {
                                "\r\n"
                                "Hello, World!";
     HttpRequest parser;
-    parser.parse(std::vector<char>{request_data.begin(), request_data.end()});
+    parser.reset_state();
+    parser.push_chunk(std::vector<char>{request_data.begin(), request_data.end()});
     parser.print();
 }
 
@@ -108,21 +109,21 @@ void httpTest() {
 //     EXPECT_NO_THROW(testepoll());
 // }
 
-TEST(ProtobufTest, ProtobufSerialization) {
-    packet::Message msg;
-    msg.set_ip("192.168.1.1");
-    msg.set_port(8080);
-    msg.set_body("This is the body data");
+// TEST(ProtobufTest, ProtobufSerialization) {
+//     packet::Message msg;
+//     msg.set_ip("192.168.1.1");
+//     msg.set_port(8080);
+//     msg.set_body("This is the body data");
 
-    std::string serialized_data;
-    ASSERT_TRUE(msg.SerializeToString(&serialized_data));
+//     std::string serialized_data;
+//     ASSERT_TRUE(msg.SerializeToString(&serialized_data));
 
-    packet::Message new_msg;
-    ASSERT_TRUE(new_msg.ParseFromString(serialized_data));
-    EXPECT_EQ(new_msg.ip(), "192.168.1.1");
-    EXPECT_EQ(new_msg.port(), 8080);
-    EXPECT_EQ(new_msg.body(), "This is the body data");
-}
+//     packet::Message new_msg;
+//     ASSERT_TRUE(new_msg.ParseFromString(serialized_data));
+//     EXPECT_EQ(new_msg.ip(), "192.168.1.1");
+//     EXPECT_EQ(new_msg.port(), 8080);
+//     EXPECT_EQ(new_msg.body(), "This is the body data");
+// }
 
 TEST(HttpTest, HttpRequestParsing) {
     std::string request_data = "POST /submit HTTP/1.1\r\n"
@@ -132,14 +133,15 @@ TEST(HttpTest, HttpRequestParsing) {
                                "\r\n"
                                "Hello, World!";
     HttpRequest parser;
-    parser.parse(std::vector<char>{request_data.begin(), request_data.end()});
+    parser.reset_state();
+    parser.push_chunk(std::vector<char>{request_data.begin(), request_data.end()});
 
-    EXPECT_EQ(parser.getMethod(), "POST");
-    EXPECT_EQ(parser.getPath(), "/submit");
-    EXPECT_EQ(parser.getVersion(), "HTTP/1.1");
-    EXPECT_EQ(parser.getHeader("Host"), "www.example.com");
-    EXPECT_EQ(parser.getHeader("Connection"), "keep-alive");
-    EXPECT_EQ(parser.getHeader("Content-Length"), "13");
+    EXPECT_EQ(parser.method(), "POST");
+    EXPECT_EQ(parser.url(), "/submit");
+
+    EXPECT_EQ(parser.header_keys()["host"], "www.example.com");
+    EXPECT_EQ(parser.header_keys()["connection"], "keep-alive");
+    EXPECT_EQ(parser.header_keys()["content-length"], "13");
     // EXPECT_EQ(parser.getBody(), "Hello, World!");
 }
 

@@ -58,5 +58,6 @@ void HttpConn::toResponse() {
 }
 
 void HttpConn::parse() {
-    HttpRequest::parse(buffer_->getReadBuff());
+    
+    HttpRequest::push_chunk(buffer_->getReadBuff());
 }
