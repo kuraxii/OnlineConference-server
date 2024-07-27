@@ -115,27 +115,28 @@ void httpTest() {
 //     msg.set_port(8080);
 //     msg.set_body("This is the body data");
 
-//     std::string serialized_data;
-//     ASSERT_TRUE(msg.SerializeToString(&serialized_data));
+// std::string serialized_data;
+// ASSERT_TRUE(msg.SerializeToString(&serialized_data));
 
-//     packet::Message new_msg;
-//     ASSERT_TRUE(new_msg.ParseFromString(serialized_data));
-//     EXPECT_EQ(new_msg.ip(), "192.168.1.1");
-//     EXPECT_EQ(new_msg.port(), 8080);
-//     EXPECT_EQ(new_msg.body(), "This is the body data");
+// packet::Message new_msg;
+// ASSERT_TRUE(new_msg.ParseFromString(serialized_data));
+// EXPECT_EQ(new_msg.ip(), "192.168.1.1");
+// EXPECT_EQ(new_msg.port(), 8080);
+// EXPECT_EQ(new_msg.body(), "This is the body data");
 // }
 
 TEST(HttpTest, HttpRequestParsing) {
-    std::string request_data = "POST /submit HTTP/1.1\r\n"
-                               "Host: www.example.com\r\n"
-                               "Connection: keep-alive\r\n"
-                               "Content-Length: 13\r\n"
-                               "\r\n"
-                               "Hello, World!";
+    std::string request_data1 = "POST /submit HTTP/1.1\r\n"
+                                "Host: www.example.com\r\n"
+                                "Connection: keep-alive\r\n";
+
+    std::string request_data2 = "Content-Length: 13\r\n"
+                                "\r\n"
+                                "Hello, World!";
     HttpRequest parser;
     parser.reset_state();
-    parser.push_chunk(std::vector<char>{request_data.begin(), request_data.end()});
-
+    parser.push_chunk(std::vector<char>{request_data1.begin(), request_data1.end()});
+    parser.push_chunk(std::vector<char>{request_data2.begin(), request_data2.end()});
     EXPECT_EQ(parser.method(), "POST");
     EXPECT_EQ(parser.url(), "/submit");
 

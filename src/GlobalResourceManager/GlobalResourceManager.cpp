@@ -16,7 +16,7 @@ void GlobalResourceManager::addHttpConn(int fd, std::shared_ptr<HttpConn> conn) 
     allHttpConn.insert(fd, conn);
 }
 
-void GlobalResourceManager::addTask(KURAXII::Task &task) {
+void GlobalResourceManager::addTask(kuraxii::Task &task) {
     threadPool.addTask(task);
 }
 

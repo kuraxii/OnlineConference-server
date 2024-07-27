@@ -23,15 +23,15 @@ class GlobalResourceManager : public Singleton<GlobalResourceManager> {
 public:
     void addHttpConn(int fd, std::shared_ptr<HttpConn>);
     void removeHttpConn(int fd);
-    void addTask(KURAXII::Task &task);
+    void addTask(kuraxii::Task &task);
 
 private:
     GlobalResourceManager();
     ~GlobalResourceManager() = default;
-    KURAXII::AtomicUnorderedMap<int, std::shared_ptr<HttpConn>> allHttpConn; // 保存所有的http连接
-    KURAXII::AtomicList<std::shared_ptr<ConferenceManager>> allConferenceManager;
+    kuraxii::AtomicUnorderedMap<int, std::shared_ptr<HttpConn>> allHttpConn; // 保存所有的http连接
+    kuraxii::AtomicList<std::shared_ptr<ConferenceManager>> allConferenceManager;
     UDPManager udpUDPManager;
-    KURAXII::ThreadPool threadPool;
+    kuraxii::ThreadPool threadPool;
 
     std::mutex mutex;
 };

@@ -13,19 +13,21 @@
 #include "../epoll/epoll.h"
 #include "../http/HttpConn.h"
 #include "../template/template.hpp"
+#include "../timer/timer.hpp"
 #include "kuraxii_utils/utils/map/AtomicUnorderedMap.h"
 class server {
 public:
     server();
     void init(int ip = INADDR_ANY, unsigned short port = 8888);
     int run();
-    void dealListen();
-    void closeConn(int fd);
-    void dealRead(int fd);
+    void do_listen();
+    void do_close(int fd);
+    void do_read(int fd);
     void dealWrite(int fd);
 
 private:
     int lfd;
+    timer_context timer;
     EPOLL epoll;
-    KURAXII::AtomicUnorderedMap<int, std::shared_ptr<HttpConn>> unassignedHttpConnections;
+    kuraxii::AtomicUnorderedMap<int, std::shared_ptr<HttpConn>> unassignedHttpConnections;
 };

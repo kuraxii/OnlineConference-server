@@ -6,7 +6,7 @@
 
 // clang-format off
 #define KURAXII_NAMESPACE_BEGIN                        \
-namespace KURAXII {                                    
+namespace kuraxii {                                    
 
 #define KURAXII_NAMESPACE_END                          \
 } /* end of namespace THREAD_POOL */

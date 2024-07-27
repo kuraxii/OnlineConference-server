@@ -42,7 +42,13 @@ void server::init(int ip, unsigned short port) {
 int server::run() {
     int ret;
     while (1) {
-        if ((ret = epoll.wait()) < 0) {
+        // 删除或读取最近的定时节点
+        auto dt = timer.duration_to_next_timer();
+        std::chrono::milliseconds ms{-1};
+        if (dt.count() >= 0) {
+            ms = std::chrono::duration_cast<std::chrono::milliseconds>(dt);
+        }
+        if ((ret = epoll.wait(ms.count())) < 0) {
             perror("epool.wait...");
         }
 
@@ -51,19 +57,19 @@ int server::run() {
             int fd = epoll.getFd(i);
             uint32_t events = epoll.getEvent(i);
             if (fd == lfd) {
-                dealListen();
+                do_listen();
             } else if (events & (EPOLLRDHUP | EPOLLHUP | EPOLLERR)) { // 异常
-                closeConn(fd);
+                do_close(fd);
             } else if (events & EPOLLIN) {
 
-                KURAXII::Task task{std::bind(&server::dealRead, this, fd)};
+                kuraxii::Task task{std::bind(&server::do_read, this, fd)};
                 GlobalResourceManager::getInstance().addTask(task);
             }
         }
     }
 }
 
-void server::dealListen() {
+void server::do_listen() {
     struct sockaddr_in addr;
     socklen_t len = sizeof(addr);
     int fd = accept(lfd, (struct sockaddr *)&addr, &len);
@@ -74,30 +80,37 @@ void server::dealListen() {
     GlobalResourceManager::getInstance().addHttpConn(fd, conn);
 }
 
-void server::dealRead(int fd) {
-
+void server::do_read(int fd) {
+    // 注意：TCP 基于流，可能粘包
+    // fmt::println("开始读取...");
+    // 设置一个 3 秒的定时器，若 3
+    // 秒内没有读到任何请求，则视为对方放弃，关闭连接
     auto conn = unassignedHttpConnections.get(fd);
     assert(conn != std::nullopt);
+    if ((*conn)->request_finished()) {
+        (*conn)->reset_state();
+        timer.set_timeout(std::chrono::seconds(3), [=] { (*conn)->reset_state(); });
+    }
     (*conn)->read();
     (*conn)->parse();
-    if (!((*conn)->method() == "post")) {
-        // debug
-        return;
-    }
-    if ((*conn)->method() != "POST") {
-        // debug
-        return;
-    } else {
-    }
-    message_info::MessageInfo msg;
-    msg.ParseFromArray((*conn)->body().data(), (*conn)->body().size());
-    // if()
-    // {
 
+    // if ((*conn)->method() != "POST") {
+    //     // debug
+    //     return;
+    // } else {
     // }
+
+    if ((*conn)->request_finished()) {
+        message_info::MessageInfo msg;
+        msg.ParseFromArray((*conn)->body().data(), (*conn)->body().size());
+        // if()
+        // {
+
+        // }
+    }
 }
 
-void server::closeConn(int fd) {
+void server::do_close(int fd) {
     unassignedHttpConnections.remove(fd);
     GlobalResourceManager::getInstance().removeHttpConn(fd);
 }
